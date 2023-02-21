@@ -1,15 +1,24 @@
-import React from 'react';
-import { Alert } from 'react-native';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { FlatList, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { useStore } from '../stores/Global.store';
 
-const Expenses: React.FC = () => (
-   <View style={styles.container}>
-      <Text>Expenses</Text>
-   </View>
-);
+import ExpensesItem from '../components/ExpensesItem';
+
+const Expenses: React.FC = () => {
+   const store = useStore();
+   return (
+      <View style={styles.container}>
+         <FlatList data={store.expenses} renderItem={({ item }) => <ExpensesItem expense={item} />} />
+      </View>
+   );
+};
 
 const styles = StyleSheet.create({
-   container: {},
+   container: {
+      paddingTop: 30,
+   },
 });
 
 export default Expenses;

@@ -2,7 +2,6 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import ButtonAdd from '../components/ButtonAdd';
 import AddExpense from '../screens/AddExpense';
 import Expenses from '../screens/Expenses';
 import Main from '../screens/Main';
@@ -25,11 +24,10 @@ const Navigation: React.FC = () => {
                headerTitleAlign: 'center',
             }}
          >
-            <Stack.Screen name='Main' component={Main} options={{ title: 'Main' }} />
-            <Stack.Screen name='Expenses' component={Expenses} options={{ title: 'Expenses' }} />
-            <Stack.Screen name='AddExpense' component={AddExpense} options={{ title: 'AddExpense' }} />
+            <Stack.Screen name='Main' component={Main} options={{ title: 'Главная' }} />
+            <Stack.Screen name='Expenses' component={Expenses} options={{ title: 'Расходы' }} />
+            <Stack.Screen name='AddExpense' component={AddExpense} options={{ title: 'Добавить расход' }} />
          </Stack.Navigator>
-         <ButtonAdd />
       </NavigationContainer>
    );
 };

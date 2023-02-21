@@ -1,7 +1,14 @@
 import React, { createContext } from 'react';
 import { types, Instance } from 'mobx-state-tree';
 
+import { categories, expenses } from '../data/data';
+import { NewExpense, ITExpense } from '../types/types';
+
+import me from '../assets/category-me.png';
+
 const expensesModel = types.model('expensesModel', {
+   id: types.number,
+   img: types.number,
    name: types.string,
    price: types.number,
    category: types.string,
@@ -10,40 +17,8 @@ const expensesModel = types.model('expensesModel', {
 
 export const globalStore = types
    .model('globalStore', {
-      // addExpensePage: types.optional(types.boolean, false),
-      categories: types.optional(types.array(types.string), [
-         'На себя любимого',
-         'Продукты',
-         'Семья',
-         'Развлечения',
-         'Одежда',
-      ]),
-      expenses: types.optional(types.array(expensesModel), [
-         {
-            name: 'Новый телефон',
-            price: 10000,
-            category: 'me',
-            date: '06/02/23',
-         },
-         {
-            name: 'Продукты в магазине',
-            price: 1000,
-            category: 'products',
-            date: '07/02/23',
-         },
-         {
-            name: 'Сигареты',
-            price: 193,
-            category: 'products',
-            date: '07/02/23',
-         },
-         {
-            name: 'Сигареты',
-            price: 193,
-            category: 'products',
-            date: '07/02/23',
-         },
-      ]),
+      categories: types.optional(types.array(types.string), categories),
+      expenses: types.optional(types.array(expensesModel), expenses),
    })
    .views(self => ({
       get namesComputed() {
@@ -55,11 +30,28 @@ export const globalStore = types
          });
          return names;
       },
+      get allExpensesComputed() {
+         let count = 0;
+         for (let i = 0; i < self.expenses.length; i++) {
+            count += self.expenses[i].price;
+         }
+         return count;
+      },
    }))
    .actions(self => ({
-      // setAddExpensePage(newValue: boolean) {
-      //    self.addExpensePage = newValue;
-      // },
+      createNewExpense(values: NewExpense) {
+         const newExpense: ITExpense = {
+            id: self.expenses.length + 1,
+            img: me,
+            name: values.name,
+            price: Number(values.price),
+            date: values.date,
+            category: values.category,
+         };
+         // Не сразу обновляет self.expenses поэтому в Expenses screen
+         // после добавления не отображается новый расход
+         self.expenses.push(newExpense);
+      },
    }));
 
 export const RootStoreContext = createContext<null | Instance<typeof globalStore>>(null);
