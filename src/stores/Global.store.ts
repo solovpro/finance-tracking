@@ -4,7 +4,7 @@ import { types, Instance } from 'mobx-state-tree';
 import { categories, expenses } from '../data/data';
 import { NewExpense, ITExpense } from '../types/types';
 
-import me from '../assets/category-me.png';
+import me from '../assets/png/category-me.png';
 
 const expensesModel = types.model('expensesModel', {
    id: types.number,
@@ -23,19 +23,47 @@ export const globalStore = types
    .views(self => ({
       get namesComputed() {
          let names: String[] = [];
-         self.expenses.forEach((currentValue, index, array) => {
-            if (!array.includes(currentValue)) {
+
+         self.expenses.forEach(currentValue => {
+            if (!names.includes(currentValue.name)) {
                names.push(currentValue.name);
             }
          });
+
          return names;
       },
+
       get allExpensesComputed() {
-         let count = 0;
+         let count: number = 0;
+
          for (let i = 0; i < self.expenses.length; i++) {
             count += self.expenses[i].price;
          }
+
          return count;
+      },
+
+      get mostUsedCategories() {
+         let maxCount: number = 0;
+         let count: number = 0;
+         let category: string = '';
+
+         self.categories.forEach(element => {
+            count = 0;
+
+            for (let i = 0; i < self.expenses.length; i++) {
+               if (self.expenses[i].category.includes(element)) {
+                  count += 1;
+
+                  if (count > maxCount) {
+                     maxCount = count;
+                     category = element;
+                  }
+               }
+            }
+         });
+
+         return category;
       },
    }))
    .actions(self => ({
@@ -48,8 +76,7 @@ export const globalStore = types
             date: values.date,
             category: values.category,
          };
-         // Не сразу обновляет self.expenses поэтому в Expenses screen
-         // после добавления не отображается новый расход
+
          self.expenses.push(newExpense);
       },
    }));

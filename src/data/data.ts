@@ -1,5 +1,5 @@
-import me from '../assets/category-me.png';
-import products from '../assets/category-products.png';
+import me from '../assets/png/category-me.png';
+import products from '../assets/png/category-products.png';
 
 import { ITExpense } from '../types/types';
 
@@ -9,7 +9,7 @@ export let expenses: Array<ITExpense> = [
       img: me,
       name: 'Новый телефон',
       price: 10000,
-      category: 'me',
+      category: 'На себя любимого',
       date: '06/02/23',
    },
    {
@@ -17,7 +17,7 @@ export let expenses: Array<ITExpense> = [
       img: products,
       name: 'Продукты в магазине',
       price: 1000,
-      category: 'products',
+      category: 'Продукты',
       date: '07/02/23',
    },
    {
@@ -25,7 +25,7 @@ export let expenses: Array<ITExpense> = [
       img: products,
       name: 'Сигареты',
       price: 193,
-      category: 'products',
+      category: 'Продукты',
       date: '07/02/23',
    },
    {
@@ -33,7 +33,7 @@ export let expenses: Array<ITExpense> = [
       img: products,
       name: 'Сигареты',
       price: 193,
-      category: 'products',
+      category: 'Продукты',
       date: '07/01/23',
    },
 ];

@@ -1,34 +1,46 @@
 import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
 
-import AddExpense from '../screens/AddExpense';
-import Expenses from '../screens/Expenses';
-import Main from '../screens/Main';
+import ExpensesScreen from '../screens/ExpensesScreen';
+import FormScreen from '../screens/FormScreen';
+import HomeScreen from '../screens/HomeScreen';
+
+import SvgExpenses from '../assets/svg/SvgExpenses';
+import SvgHome from '../assets/svg/SvgHome';
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const TabStack = () => {
+   return (
+      <Tab.Navigator initialRouteName='Home' screenOptions={{ headerShown: false }}>
+         <Tab.Screen
+            name='Home'
+            component={HomeScreen}
+            options={{
+               tabBarLabel: 'Главная',
+               tabBarIcon: ({ focused }) => <SvgHome focused={focused} />,
+            }}
+         />
+         <Tab.Screen
+            name='Expenses'
+            component={ExpensesScreen}
+            options={{
+               tabBarLabel: 'Все расходы',
+               tabBarIcon: ({ focused }) => <SvgExpenses focused={focused} />,
+            }}
+         />
+      </Tab.Navigator>
+   );
+};
 
 const Navigation: React.FC = () => {
    return (
-      <NavigationContainer>
-         <Stack.Navigator
-            initialRouteName='Main'
-            screenOptions={{
-               headerStyle: {
-                  backgroundColor: '#2391FF',
-               },
-               headerTintColor: '#fff',
-               headerTitleStyle: {
-                  fontWeight: 'bold',
-               },
-               headerTitleAlign: 'center',
-            }}
-         >
-            <Stack.Screen name='Main' component={Main} options={{ title: 'Главная' }} />
-            <Stack.Screen name='Expenses' component={Expenses} options={{ title: 'Расходы' }} />
-            <Stack.Screen name='AddExpense' component={AddExpense} options={{ title: 'Добавить расход' }} />
-         </Stack.Navigator>
-      </NavigationContainer>
+      <Stack.Navigator initialRouteName='TabStack' screenOptions={{ headerShown: false }}>
+         <Stack.Screen name='TabStack' component={TabStack} />
+         <Stack.Screen name='Form' component={FormScreen} />
+      </Stack.Navigator>
    );
 };
 

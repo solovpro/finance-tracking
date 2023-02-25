@@ -27,8 +27,6 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       marginBottom: 20,
       paddingBottom: 20,
-      borderBottomColor: '#AAA',
-      borderBottomWidth: 1,
    },
    image: {
       width: 50,
