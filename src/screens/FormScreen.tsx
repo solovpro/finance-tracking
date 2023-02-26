@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Pressable, TextInput, Alert, TouchableOpacity } from 'react-native';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { Formik } from 'formik';
 
+import CategoriesButtons from '../components/CategoriesButtons';
+import CalendarModal from '../components/CalendarModal';
 import { useNavigationType } from '../hooks/hooks';
 import { useStore } from '../stores/Global.store';
 import Container from '../components/Container';
@@ -10,19 +11,26 @@ import { NewExpense } from '../types/types';
 
 const FormScreen: React.FC = () => {
    const [calendar, setCalendar] = useState<boolean>(false);
+   const [categories, setCategories] = useState<boolean>(false);
+
    const store = useStore();
    const navigation = useNavigationType();
+
+   const onSubmit = (values: NewExpense) => {
+      store.createNewExpense(values);
+      navigation.goBack();
+      Alert.alert('Новый расход успешно добавлен');
+   };
+
    return (
       <Container page={'Добавить расход'} isArrow>
          <Formik
             initialValues={{ name: '', price: '', date: '', category: '' }}
             onSubmit={(values: NewExpense) => {
-               store.createNewExpense(values);
-               Alert.alert('Новый расход успешно добавлен');
-               navigation.goBack();
+               onSubmit(values);
             }}
          >
-            {({ handleChange, handleSubmit, values }) => (
+            {({ handleChange, handleSubmit, values, setFieldValue }) => (
                <View style={styles.container}>
                   <TextInput
                      style={styles.input}
@@ -36,44 +44,31 @@ const FormScreen: React.FC = () => {
                      onChangeText={handleChange('price')}
                      value={values.price}
                   />
-                  {/*<TouchableOpacity*/}
-                  {/*   onPress={() => {*/}
-                  {/*      setCalendar(true);*/}
-                  {/*   }}*/}
-                  {/*   style={styles.input}*/}
-                  {/*>*/}
-                  {/*   <Text style={styles.inputText}>Дата</Text>*/}
-                  {/*</TouchableOpacity>*/}
-                  <TextInput
-                     style={styles.input}
-                     placeholder={'Дата'}
-                     onPressIn={() => {
-                        setCalendar(true);
-                     }}
-                     onChangeText={handleChange('date')}
+                  <TouchableOpacity onPress={() => setCalendar(true)} style={styles.input}>
+                     <Text style={[styles.inputText, !!values.date && styles.buttonActive]}>
+                        {values.date || 'Дата'}
+                     </Text>
+                  </TouchableOpacity>
+                  <CalendarModal
+                     setFieldValue={setFieldValue}
+                     setCalendar={setCalendar}
+                     calendar={calendar}
                   />
-                  {/*{calendar && (*/}
-                  {/*   <Calendar*/}
-                  {/*      minDate={'2021-05-10'}*/}
-                  {/*      maxDate={'2024-05-30'}*/}
-                  {/*      onDayPress={day => {*/}
-                  {/*         handleChange('date');*/}
-                  {/*         console.log(values.date);*/}
-                  {/*         setCalendar(false);*/}
-                  {/*      }}*/}
-                  {/*   />*/}
-                  {/*)}*/}
-                  <TextInput
-                     style={styles.input}
-                     placeholder={'Категория'}
-                     onChangeText={handleChange('category')}
-                     value={values.category}
-                  />
+                  <TouchableOpacity
+                     onPress={() => setCategories(!categories)}
+                     style={[styles.input, categories && styles.inputCategory]}
+                  >
+                     <Text style={[styles.inputText, !!values.category && styles.buttonActive]}>
+                        {values.category || 'Категория'}
+                     </Text>
+                  </TouchableOpacity>
+                  {categories && (
+                     <CategoriesButtons setFieldValue={setFieldValue} setCategories={setCategories} />
+                  )}
                   {
                      // Я обозначил handleSubmit как any, поскольку есть некоторые проблемы
                      // совместимости react-native с formik и чтобы не мудрить с типами и
                      // было понятно, что есть проблемы с совместимостью, я решил использовать any
-                     // пусть это и не лучшая практика
                   }
                   <Pressable style={styles.button} onPress={handleSubmit as any}>
                      <Text style={styles.buttonTitle}>Добавить</Text>
@@ -105,6 +100,9 @@ const styles = StyleSheet.create({
       paddingVertical: 6,
       fontSize: 20,
    },
+   buttonActive: {
+      color: '#000',
+   },
    button: {
       marginLeft: '10%',
       justifyContent: 'center',
@@ -118,6 +116,23 @@ const styles = StyleSheet.create({
    buttonTitle: {
       color: '#FFF',
       fontSize: 20,
+   },
+   inputCategory: {
+      marginBottom: 0,
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
+   },
+   inputCategory__Item: {
+      marginBottom: 1,
+      backgroundColor: '#2391FF',
+      borderRadius: 0,
+   },
+   inputCategory__ItemLast: {
+      borderBottomRightRadius: 15,
+      borderBottomLeftRadius: 15,
+   },
+   inputCategory__Text: {
+      color: '#FFF',
    },
 });
 

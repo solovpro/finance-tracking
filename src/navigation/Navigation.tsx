@@ -4,23 +4,23 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import ExpensesScreen from '../screens/ExpensesScreen';
 import FormScreen from '../screens/FormScreen';
-import HomeScreen from '../screens/HomeScreen';
+import StatisticsScreen from '../screens/StatisticsScreen';
 
 import SvgExpenses from '../assets/svg/SvgExpenses';
-import SvgHome from '../assets/svg/SvgHome';
+import SvgStatistics from '../assets/svg/SvgStatistics';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabStack = () => {
    return (
-      <Tab.Navigator initialRouteName='Home' screenOptions={{ headerShown: false }}>
+      <Tab.Navigator initialRouteName='Statistics' screenOptions={{ headerShown: false }}>
          <Tab.Screen
-            name='Home'
-            component={HomeScreen}
+            name='Statistics'
+            component={StatisticsScreen}
             options={{
-               tabBarLabel: 'Главная',
-               tabBarIcon: ({ focused }) => <SvgHome focused={focused} />,
+               tabBarLabel: 'Статистика',
+               tabBarIcon: ({ focused }) => <SvgStatistics focused={focused} />,
             }}
          />
          <Tab.Screen

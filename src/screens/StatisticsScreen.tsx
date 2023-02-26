@@ -3,13 +3,12 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 import { useStore } from '../stores/Global.store';
 import Container from '../components/Container';
-import ExpensesItem from '../components/ExpensesItem';
 
-const HomeScreen: React.FC = () => {
+const StatisticsScreen: React.FC = () => {
    let store = useStore();
 
    return (
-      <Container page={'Главная'}>
+      <Container page={'Статистика'}>
          <View style={styles.container}>
             <View style={styles.info}>
                <Text style={styles.infoHeader}>Записей о расходах</Text>
@@ -69,4 +68,4 @@ const styles = StyleSheet.create({
    },
 });
 
-export default HomeScreen;
+export default StatisticsScreen;

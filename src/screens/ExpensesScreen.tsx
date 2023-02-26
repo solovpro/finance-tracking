@@ -7,6 +7,7 @@ import Container from '../components/Container';
 
 const ExpensesScreen: React.FC = () => {
    const store = useStore();
+
    return (
       <Container page={'Все расходы'} isButtonAdd>
          <View style={styles.container}>
