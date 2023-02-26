@@ -1,14 +1,15 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Text, FlatList, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, FlatList } from 'react-native';
 import { useStore } from '../stores/Global.store';
 
-interface CategoriesButtonslProps {
+interface CategoriesButtonsProps {
    setFieldValue: (date: string, format: string) => void;
    setCategories: (category: boolean) => void;
 }
 
-const CategoriesButtons: React.FC<CategoriesButtonslProps> = ({ setFieldValue, setCategories }) => {
+const CategoriesButtons: React.FC<CategoriesButtonsProps> = ({ setFieldValue, setCategories }) => {
    const store = useStore();
+   const lastCategory = store.categories[store.categories.length - 1];
    return (
       <FlatList
          data={store.categories}
@@ -22,7 +23,7 @@ const CategoriesButtons: React.FC<CategoriesButtonslProps> = ({ setFieldValue, s
                style={[
                   styles.input,
                   styles.inputCategory__Item,
-                  item === store.categories[store.categories.length - 1] && styles.inputCategory__ItemLast,
+                  item === lastCategory && styles.inputCategory__ItemLast,
                ]}
             >
                <Text style={[styles.inputText, styles.inputCategory__Text]}>{item}</Text>
@@ -35,7 +36,7 @@ const CategoriesButtons: React.FC<CategoriesButtonslProps> = ({ setFieldValue, s
 const styles = StyleSheet.create({
    inputCategory__Item: {
       marginBottom: 1,
-      backgroundColor: '#2391FF',
+      backgroundColor: '#0371DF',
       borderRadius: 0,
    },
    inputCategory__ItemLast: {

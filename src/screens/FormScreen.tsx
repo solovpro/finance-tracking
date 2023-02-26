@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, Text, View, Pressable, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 
@@ -12,24 +12,36 @@ import { NewExpense } from '../types/types';
 const FormScreen: React.FC = () => {
    const [calendar, setCalendar] = useState<boolean>(false);
    const [categories, setCategories] = useState<boolean>(false);
+   const [filledAllFields, setFilledAllFields] = useState<boolean>(true);
 
    const store = useStore();
    const navigation = useNavigationType();
 
+   const isFieldsFilled = (values: NewExpense) => {
+      for (let key in values) {
+         const isEmptyField = !values[key as keyof typeof values];
+
+         if (isEmptyField) {
+            setFilledAllFields(false);
+            return false;
+         }
+      }
+
+      setFilledAllFields(true);
+      return true;
+   };
+
    const onSubmit = (values: NewExpense) => {
-      store.createNewExpense(values);
-      navigation.goBack();
-      Alert.alert('Новый расход успешно добавлен');
+      if (isFieldsFilled(values)) {
+         store.createNewExpense(values);
+         navigation.goBack();
+         Alert.alert('Новый расход успешно добавлен');
+      }
    };
 
    return (
       <Container page={'Добавить расход'} isArrow>
-         <Formik
-            initialValues={{ name: '', price: '', date: '', category: '' }}
-            onSubmit={(values: NewExpense) => {
-               onSubmit(values);
-            }}
-         >
+         <Formik initialValues={{ name: '', price: '', date: '', category: '' }} onSubmit={onSubmit}>
             {({ handleChange, handleSubmit, values, setFieldValue }) => (
                <View style={styles.container}>
                   <TextInput
@@ -40,6 +52,7 @@ const FormScreen: React.FC = () => {
                   />
                   <TextInput
                      style={styles.input}
+                     keyboardType='numeric'
                      placeholder={'Цена'}
                      onChangeText={handleChange('price')}
                      value={values.price}
@@ -64,6 +77,11 @@ const FormScreen: React.FC = () => {
                   </TouchableOpacity>
                   {categories && (
                      <CategoriesButtons setFieldValue={setFieldValue} setCategories={setCategories} />
+                  )}
+                  {!filledAllFields && (
+                     <View style={styles.filledContainer}>
+                        <Text style={styles.filledContainer__Text}>Заполните все поля</Text>
+                     </View>
                   )}
                   {
                      // Я обозначил handleSubmit как any, поскольку есть некоторые проблемы
@@ -133,6 +151,15 @@ const styles = StyleSheet.create({
    },
    inputCategory__Text: {
       color: '#FFF',
+   },
+   filledContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+   },
+   filledContainer__Text: {
+      fontSize: 20,
+      color: '#ad2a2a',
    },
 });
 

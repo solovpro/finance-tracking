@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 import { useNavigationType } from '../hooks/hooks';
 
@@ -23,29 +23,27 @@ const Container: React.FC<ContainerProps> = ({ page, isArrow = false, isButtonAd
    };
 
    return (
-      <SafeAreaView>
-         <View style={styles.header}>
-            {isArrow && (
-               <TouchableOpacity style={styles.headerImage_Container} onPress={comeBack}>
-                  <SvgBackArrow />
-               </TouchableOpacity>
-            )}
-            <Text
-               style={[
-                  styles.headerTitle,
-                  isArrow && styles.headerTitle_Arrow,
-                  isButtonAdd && styles.headerTitle_Button,
-               ]}
-            >
-               {page}
-            </Text>
-            {isButtonAdd && (
-               <TouchableOpacity style={styles.buttonAdd} onPress={openFormScreen}>
-                  <Text style={styles.buttonAddTitle}>+</Text>
-               </TouchableOpacity>
-            )}
-         </View>
-      </SafeAreaView>
+      <View style={styles.header}>
+         {isArrow && (
+            <TouchableOpacity style={styles.headerImage_Container} onPress={comeBack}>
+               <SvgBackArrow />
+            </TouchableOpacity>
+         )}
+         <Text
+            style={[
+               styles.headerTitle,
+               isArrow && styles.headerTitle_Arrow,
+               isButtonAdd && styles.headerTitle_Button,
+            ]}
+         >
+            {page}
+         </Text>
+         {isButtonAdd && (
+            <TouchableOpacity style={styles.buttonAdd} onPress={openFormScreen}>
+               <Text style={styles.buttonAddTitle}>+</Text>
+            </TouchableOpacity>
+         )}
+      </View>
    );
 };
 
@@ -55,7 +53,6 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       flexDirection: 'row',
-      // paddingTop: 37,
       height: 60,
       marginHorizontal: 'auto',
       backgroundColor: '#2391FF',
