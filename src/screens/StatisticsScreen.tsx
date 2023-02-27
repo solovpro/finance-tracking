@@ -4,6 +4,8 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useStore } from '../stores/Global.store';
 import Container from '../components/Container';
 
+// не обновляется сразу из-за особенностей навигации или mst
+// не прокручивается вниз flatlist если будет много элементов
 const StatisticsScreen: React.FC = () => {
    let store = useStore();
 
